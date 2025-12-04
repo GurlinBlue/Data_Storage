@@ -1,0 +1,6 @@
+nest_asyncio
+playwright
+pandas
+sqlalchemy
+requests
+beautifulsoup4
