@@ -44,23 +44,28 @@ Requires browser execution to access elements
 Playwright Chromium is therefore used in headless mode to load and parse 8 paginated pages (?page=0..7).
 
 🧱 3. Pipeline Architecture
+```txt
 Airflow DAG
 │
 ├── Task 1: scrape_movie_list
-│     • Scrapes 8 dynamic pages
-│     • Extracts titles + URLs
-│     • Saves movies_raw.csv
+│   • Scrapes 8 dynamic pages
+│   • Extracts titles + URLs
+│   • Saves movies_raw.csv
 │
 ├── Task 2: scrape_movie_details
-│     • Opens each movie page with Playwright
-│     • Extracts all metadata fields
-│     • Cleans + validates data
-│     • Saves movies_clean.csv
+│   • Opens each movie page with Playwright
+│   • Extracts all metadata fields
+│   • Cleans + validates data
+│   • Saves movies_clean.csv
 │
 └── Task 3: load_to_sqlite
-      • Inserts cleaned data into SQLite
-      • Creates indexes
-      • Verifies successful load
+    • Inserts cleaned data into SQLite
+    • Creates indexes
+    • Verifies successful load
+```
+
+
+
 
 🛠 4. Technology Stack
 Component	Tool
@@ -178,17 +183,7 @@ director	TEXT
 original_language	TEXT
 box_office	TEXT
 distributor	TEXT
-Indexes Created
 
-idx_tomatometer
-
-idx_audience
-
-idx_genre
-
-idx_rating
-
-Improves filtering and query performance.
 
 🪂 8. Airflow Automation
 
@@ -260,22 +255,31 @@ audience_score	92
 genre	Animation, Comedy
 duration	1h 48m
 director	Byron Howard, Rich Moore
+
 📁 10. Project Structure
+```txt
+
 AIRFLOW/
 │
 ├── dags/
-│   └── project.py               # Airflow DAG + scraping + cleaning + loading
+│   └── project.py               # Airflow DAG: scraping + cleaning + loading
 │
 ├── data/
-│   ├── movies_raw.csv           # Output: movie list
-│   ├── movies_clean.csv         # Output: cleaned metadata
-│   └── movies.db                # SQLite database
+│   ├── movies_raw.csv           # Output: scraped movie list (Task 1)
+│   ├── movies_clean.csv         # Output: cleaned metadata (Task 2)
+│   └── movies.db                # SQLite database (Task 3)
 │
-├── logs/                        # Airflow logs
-├── plugins/                     # (Optional Airflow plugins)
-├── config/
+├── logs/                        # Airflow execution logs
 │
-├── .env
-├── docker-compose.yaml
-├── Dockerfile
-└── requirements.txt
+├── plugins/                    
+│
+├── config/                     
+│
+├── .env                         # Environment variables (Playwright / Airflow)
+│
+├── docker-compose.yaml          # Airflow Docker Compose stack
+│
+├── Dockerfile                   # Custom Dockerfile (Playwright + dependencies)
+│
+└── requirements.txt             # Python dependencies (Playwright, Pandas, etc.)
+```
